@@ -1,0 +1,47 @@
+#include "GiraffeApp.h"
+#include "Moose.h"
+#include "AppFactory.h"
+#include "MooseSyntax.h"
+
+template<>
+InputParameters validParams<GiraffeApp>()
+{
+  InputParameters params = validParams<MooseApp>();
+  return params;
+}
+
+GiraffeApp::GiraffeApp(InputParameters parameters) :
+    MooseApp(parameters)
+{
+  Moose::registerObjects(_factory);
+  GiraffeApp::registerObjects(_factory);
+
+  Moose::associateSyntax(_syntax, _action_factory);
+  GiraffeApp::associateSyntax(_syntax, _action_factory);
+}
+
+GiraffeApp::~GiraffeApp()
+{
+}
+
+// External entry point for dynamic application loading
+extern "C" void GiraffeApp__registerApps() { GiraffeApp::registerApps(); }
+void
+GiraffeApp::registerApps()
+{
+  registerApp(GiraffeApp);
+}
+
+// External entry point for dynamic object registration
+extern "C" void GiraffeApp__registerObjects(Factory & factory) { GiraffeApp::registerObjects(factory); }
+void
+GiraffeApp::registerObjects(Factory & /*factory*/)
+{
+}
+
+// External entry point for dynamic syntax association
+extern "C" void GiraffeApp__associateSyntax(Syntax & syntax, ActionFactory & action_factory) { GiraffeApp::associateSyntax(syntax, action_factory); }
+void
+GiraffeApp::associateSyntax(Syntax & /*syntax*/, ActionFactory & /*action_factory*/)
+{
+}
